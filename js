@@ -24,7 +24,7 @@ let newImage =[];
 let L_Random =0;
 let counter = 0;
 let middleRandom =0;
-let limitRound = 25;
+let limitlimitRound = 25;
 let R_Random =0;
 
 const mainSection = document.getElementById('BoxImg');
@@ -32,22 +32,19 @@ let leftImage = document.getElementById('left');
 let middleImage = document.getElementById('middle');
 let rightImage =document.getElementById('right');
 
-function Product(imageName , imageSource , votes =0 , shown = 0){
+function Product(imageName , imageSource){
 this.name = imageName;
 this.source = imageSource;
-this.votes=votes;
-this.shown=shown;
+this.votes=0;
+this.shown=0;
 Product.newImage.push(this);
 
 }
 
 Product.newImage =[];
-
-getStorage();
-
-//for( let i =0 ;i<SrcImg.length;i++){
-  //  new Product(SrcImg[i].split('.')[0], SrcImg[i]);
-//}
+for( let i =0 ;i<SrcImg.length;i++){
+    new Product(SrcImg[i].split('.')[0], SrcImg[i]);
+}
 
 
 function render(){
@@ -67,9 +64,6 @@ Product.newImage[middleRandom].shown++;
 rightImage.src = './img/' + Product.newImage[R_Random].source;
 Product.newImage[R_Random].shown++;
 
-localStorage.data = JSON.stringify(Product.newImage)
-
-
 
 }
 render();
@@ -79,14 +73,14 @@ function MethodClick(e) {
     
     
 
-    if(e.target.id === 'left'  && counter < limitRound ){
+    if(e.target.id === 'left'  && counter < limitlimitRound ){
         Product.newImage[L_Random].votes ++
         console.log(Product.newImage[L_Random].votes)
         counter++;
         render();
        
     }else
-    if(e.target.id === 'middle'  && counter < limitRound ){
+    if(e.target.id === 'middle'  && counter < limitlimitRound ){
         Product.newImage[middleRandom].votes ++
         console.log(Product.newImage[middleRandom].votes)
         counter++;
@@ -95,25 +89,31 @@ function MethodClick(e) {
         else
     
      
-    if(e.target.id === 'right'  && counter < limitRound ){
+    if(e.target.id === 'right'  && counter < limitlimitRound ){
         Product.newImage[R_Random].votes ++
         console.log(Product.newImage[R_Random].votes)
         counter++;
         render();
         
     }
-    if (counter >= limitRound){
+    if (counter >= limitlimitRound){
         mainSection.removeEventListener('click', MethodClick);
     }
     
 }
+
+
+
+
 function randomNumber (min , max){
     return Math.floor( Math.random() * ( max - min + 1 ) + min );
 }
 
-let buttonClick = document.getElementById('button');
 
-buttonClick.addEventListener('click',getResult);
+
+let B_Click = document.getElementById('button');
+
+B_Click.addEventListener('click',getResult);
 function getResult(event){
     let list = document.getElementById('Boxlist')
     let unorderedlist = document.createElement('ul')
@@ -128,44 +128,40 @@ unorderedlist.appendChild(listItem)
     }
 
    
- buttonClick.removeEventListener('click' , getResult );
+ B_Click.removeEventListener('click' , getResult );
  createChart();
 }
 
 function createChart (){
-    let nameArr = [];
-    let shownArr = [];
-    let voteArr = [];
+    let NameArray = [];
+    let ShownArray = [];
+    let VoreArray = [];
      
     for ( let i =0 ;i <Product.newImage.length;i++){
 
-        nameArr.push(Product.newImage[i].name);
-        shownArr.push(Product.newImage[i].shown);
-        voteArr.push(Product.newImage[i].votes);
+        NameArray.push(Product.newImage[i].name);
+        ShownArray.push(Product.newImage[i].shown);
+        VoreArray.push(Product.newImage[i].votes);
     }
-console.log(nameArr)
-console.log(shownArr)
-console.log(voteArr)
-
+console.log(NameArray)
+console.log(ShownArray)
+console.log(VoreArray)
 let ctx = document.getElementById( 'chart' ).getContext( '2d' );
-
-for (let i =0 ; i<nameArr.length;i++){
-
+for (let i =0 ; i<NameArray.length;i++){
 let myChart = new Chart( ctx, {
-
   type: 'bar',
   data: {
-    labels: nameArr,
+    labels: NameArray,
     datasets: [{
       label: ' shown',
-      data: shownArr,
-      backglimitRoundColor:
+      data: ShownArray,
+      backglimitlimitRoundColor:
               'rgba(2955, 9, 132, 0.2)',
       borderWidth: 2,},
       {
         label: ' votes',
-      data: voteArr,
-      backglimitRoundColor:
+      data: VoreArray,
+      backglimitlimitRoundColor:
               'rgba(0, 0, 0, 1)',
       borderWidth: 2,
       
@@ -181,26 +177,4 @@ let myChart = new Chart( ctx, {
     }
   }
 } )};
-}
-function getStorage (){
-
-    if (localStorage.data){
-
-let data = JSON.parse(localStorage.data);
-for(let i = 0 ; i<SrcImg.length;i++){
-
-
-    new Product(data[i].name , data[i].source,data[i].votes, data[i].shown);
-}
-{
-
-}
-
-    }else{
-        for(let i = 0 ; i<SrcImg.length;i++){
-        new Product(SrcImg[i].split('.')[0], SrcImg[i]);
-
-    }
-}
-
 }
